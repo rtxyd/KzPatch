@@ -1,9 +1,7 @@
 ﻿using HarmonyLib;
-using Kz;
 using RimWorld;
 using System.Collections.Generic;
 using System.Reflection.Emit;
-using Verse;
 
 namespace KzPatch
 {
@@ -17,9 +15,7 @@ namespace KzPatch
             bool skip = false;
             bool skip2 = false;
             int skipint = -1;
-            Pawn p = new Pawn();
             CodeInstruction cache = null;
-            //MethodInfo methodInfo = AccessTools.Method(typeof(ReservationUtility), nameof(ReservationUtility.CanReserveAndReach));
             for (int i = 0; i < codes.Count; i++)
             {
                 CodeInstruction code = codes[i];
@@ -48,15 +44,6 @@ namespace KzPatch
                     skip = false;
                 }
             }
-        }
-    }
-    [HarmonyPatch(typeof(ThinkNode_JoinableLordHardworkingKz), nameof(ThinkNode_JoinableLordHardworkingKz.ResolveReferences))]
-    public static class ThinkNode_JoinableLordHardworkingKz_ResolveReferences
-    {
-        [HarmonyPostfix]
-        public static void ResolveReferences_patch(ThinkNode_JoinableLordHardworkingKz __instance)
-        {
-            __instance.subNodes.Add(DutyDefOf.LoadAndEnterPortal.thinkNode.DeepCopy());
         }
     }
 }
