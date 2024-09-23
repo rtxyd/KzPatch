@@ -27,7 +27,7 @@ namespace KzPatch
             for (int i = 0; i < codes.Count; i++)
             {
                 CodeInstruction code = codes[i];
-                if (!skip2 && code.opcode == OpCodes.Ldfld && code.operand.ToString().EndsWith("::p"))
+                if (!skip2 && code.opcode == OpCodes.Ldfld && code.ToString().EndsWith("::p"))
                 {
                     cache = code;
                     skip2 = true;
