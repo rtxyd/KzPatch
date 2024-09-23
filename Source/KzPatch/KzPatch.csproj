@@ -15,7 +15,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -31,16 +31,18 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>11.0</LangVersion>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\..\..\..\..\..\RIMWorld_Debug\Mods\ClassLibrary2\1.5\Assemblies\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="AncientMarketAI_Libraray%2813%29">
-      <HintPath>..\..\..\3316062206\Assemblies\AncientMarketAI_Libraray(13).dll</HintPath>
+    <Reference Include="AncientMarketAI_Libraray%2813%29, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\workshop\content\294100\3316062206\Assemblies\AncientMarketAI_Libraray(13).dll</HintPath>
     </Reference>
-    <Reference Include="AncientMarket_Libraray">
-      <HintPath>..\..\..\3316062206\Assemblies\AncientMarket_Libraray.dll</HintPath>
+    <Reference Include="AncientMarket_Libraray%2856%29">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\workshop\content\294100\3316062206\Assemblies\AncientMarket_Libraray(56).dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\..\..\..\RIMWorld_Debug\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>

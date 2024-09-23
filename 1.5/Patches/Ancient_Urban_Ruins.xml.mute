@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+
+	<Operation Class="PatchOperationFindMod">
+		<success>Always</success>
+		<mods>
+			<li>Ancient urban ruins</li>
+		</mods>
+		<match Class="PatchOperationInsert">
+			<xpath>/Defs/ThinkTreeDef[DefName="HardWorker"]/thinkRoot/subNodes/li[@Class="ThinkNode_SubtreesByTag" and insertTag = "Animal_PreWander"]</xpath>
+			<order>Append</order>
+			<value>
+				<!-- Humanlike_PostMain -->
+				<li Class="ThinkNode_SubtreesByTag">
+					<insertTag>Humanlike_PostMain</insertTag>
+				</li>
+			</value>
+		</match>
+	</Operation>
+</Patch>

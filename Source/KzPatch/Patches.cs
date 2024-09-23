@@ -80,7 +80,7 @@ namespace KzPatch
         [HarmonyPrepare]
         public static bool Prepare()
         {
-            if (ModsConfig.IsActive("xmb.AncientUrbanrUins.mo"))
+            if (Init.check)
             {
                 return true;
             }
@@ -107,7 +107,7 @@ namespace KzPatch
         [HarmonyPrepare]
         public static bool Prepare()
         {
-            if (ModsConfig.IsActive("xmb.ancienturbanruins.mo"))
+            if (Init.check)
             {
                 return true;
             }
@@ -147,7 +147,7 @@ namespace KzPatch
         [HarmonyPrepare]
         public static bool Prepare()
         {
-            if (ModsConfig.IsActive("xmb.ancienturbanruins.mo"))
+            if (Init.check)
             {
                 return true;
             }
@@ -161,13 +161,15 @@ namespace KzPatch
             return getMethod;
         }
         [HarmonyTranspiler]
-        public static IEnumerable<CodeInstruction> EnterAllowedLevel_code(IEnumerable<CodeInstruction> instructions)
+        public static IEnumerable<CodeInstruction> EnterAllowedLevel_code(ILGenerator iLGenerator, IEnumerable<CodeInstruction> instructions)
         {
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             bool skip = false;
             bool skip2 = false;
-            int skipint = -1;
+            bool skip3 = false;
+            int skipint = -2;
             CodeInstruction cache = null;
+            Label labelTrue = iLGenerator.DefineLabel();
             for (int i = 0; i < codes.Count; i++)
             {
                 CodeInstruction code = codes[i];
@@ -176,15 +178,20 @@ namespace KzPatch
                     cache = codes[i + 1];
                     skip2 = true;
                 }
-                if (code.opcode == OpCodes.Callvirt && code.operand.ToString().EndsWith("IsColonist()"))
+                if (!skip3 && code.opcode == OpCodes.Callvirt && code.operand.ToString().EndsWith("IsColonist()"))
                 {
                     yield return code;
-                    yield return codes[i + 1];
+                    yield return new CodeInstruction(OpCodes.Brtrue_S, labelTrue);
                     yield return new CodeInstruction(OpCodes.Ldarg_1);
                     yield return new CodeInstruction(OpCodes.Call, typeof(HardworkingUtility).Method("IsHardworkingPawn", new Type[] { typeof(Pawn) }));
                     yield return cache;
                     skipint = i + 1;
                     skip = true;
+                    skip3 = true;
+                }
+                if (i == skipint + 1)
+                {
+                    code.labels.Add(labelTrue);
                 }
                 if (!skip && i != skipint)
                 {
