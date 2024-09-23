@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>11.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,10 +30,17 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>11.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\..\..\..\..\..\RIMWorld_Debug\Mods\ClassLibrary2\1.5\Assemblies\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="AncientMarketAI_Libraray%2813%29">
+      <HintPath>..\..\..\3316062206\Assemblies\AncientMarketAI_Libraray(13).dll</HintPath>
+    </Reference>
+    <Reference Include="AncientMarket_Libraray">
+      <HintPath>..\..\..\3316062206\Assemblies\AncientMarket_Libraray.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\..\..\..\RIMWorld_Debug\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
