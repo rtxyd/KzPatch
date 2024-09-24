@@ -117,7 +117,11 @@ namespace KzPatch
         [HarmonyPostfix]
         public static void SelectPawn_patch_2(Pawn pawn, ref Job __result)
         {
-            if ((!pawn.IsHardworkingPawn()) && (pawn.Downed || pawn.Crawling || __result.targetA.Thing != null))
+            if (!pawn.IsHardworkingPawn())
+            {
+                return;
+            }
+            if (__result == null || !AM_ModSetting.setting.enableAICrossLevel && pawn.Downed || pawn.Crawling || __result.targetA.Thing != null)
             {
                 return;
             }
@@ -167,6 +171,7 @@ namespace KzPatch
             bool skip = false;
             bool skip2 = false;
             bool skip3 = false;
+            bool skip4 = false;
             int skipint = -2;
             CodeInstruction cache = null;
             Label labelTrue = iLGenerator.DefineLabel();
@@ -189,9 +194,10 @@ namespace KzPatch
                     skip = true;
                     skip3 = true;
                 }
-                if (i == skipint + 1)
+                if (!skip4 && code.labels.Contains((Label)cache.operand))
                 {
                     code.labels.Add(labelTrue);
+                    skip4 = true;
                 }
                 if (!skip && i != skipint)
                 {

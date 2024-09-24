@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+	<Operation Class="PatchOperationFindMod">
+		<mods>
+			<li>Ancient urban ruins</li>
+			<li>XMB.AncientUrbanrUins.MO</li>
+		</mods>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<li Class="PatchOperationInsert">
+					<success>Normal</success>
+					<xpath>/Defs/ThinkTreeDef[defName="HardWorker"]/thinkRoot/subNodes/li[@Class="ThinkNode_ConditionalOfPlayerFaction"]/subNodes/li[@Class="ThinkNode_Tagger"]/subNodes/li[@Class="ThinkNode_ConditionalNeedPercentageAbove"]</xpath>
+					<order>Append</order>
+					<value>
+						<li Class="ThinkNode_ChancePerHour_Constant">
+							<mtbDays>0.5</mtbDays>
+							<subNodes>
+								<li Class="AncientMarketAI_Libraray.JobGiver_EnterAllowedLevel"/>
+							</subNodes>
+						</li>
+						<li Class="ThinkNode_ConditionalNeedPercentageAbove">
+							<need>Food</need>
+							<threshold>0.2</threshold>
+							<invert>true</invert>
+							<subNodes>
+								<li Class="AncientMarketAI_Libraray.JobGiver_EnterAllowedLevel">
+									<leaveJoinableLordIfIssuesJob>true</leaveJoinableLordIfIssuesJob>
+								</li>
+							</subNodes>
+						</li>
+						<li Class="ThinkNode_ConditionalNeedPercentageAbove">
+							<need>Joy</need>
+							<threshold>0.4</threshold>
+							<invert>true</invert>
+							<subNodes>
+								<li Class="Kz.JobGiver_HardworkingJoy">
+									<isIdleJoy>true</isIdleJoy>
+								</li>
+								<li Class="ThinkNode_ChancePerHour_Constant">
+									<mtbDays>0.25</mtbDays>
+									<subNodes>
+										<li Class="AncientMarketAI_Libraray.JobGiver_EnterAllowedLevel"/>
+									</subNodes>
+								</li>
+							</subNodes>
+						</li>
+					</value>
+				</li>
+				<!--<li Class="PatchOperationInsert">
+			<xpath>/Defs/ThinkTreeDef[defName="HardWorker"]/thinkRoot/subNodes/li[@Class="ThinkNode_SubtreesByTag" and insertTag = "Animal_PreWander"]</xpath>
+			-->
+				<!--<order>Append</order>-->
+				<!--
+			<value>
+				-->
+				<!-- Humanlike_PostMain -->
+				<!--
+				<li Class="ThinkNode_SubtreesByTag">
+					<insertTag>Humanlike_PostMain</insertTag>
+				</li>
+			</value>
+			
+		</li>-->
+			</operations>
+		</match>
+	</Operation>
+</Patch>
