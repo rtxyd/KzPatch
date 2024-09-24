@@ -194,7 +194,7 @@ namespace KzPatch
                     skip = true;
                     skip3 = true;
                 }
-                if (!skip4 && code.labels.Contains((Label)cache.operand))
+                if (!skip4 && skip2 && code.labels.Contains((Label)cache.operand))
                 {
                     code.labels.Add(labelTrue);
                     skip4 = true;
