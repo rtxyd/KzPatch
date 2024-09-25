@@ -22,37 +22,55 @@ namespace KzPatch
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             bool skip = false;
             bool skip2 = false;
-            int skipint = -1;
+            bool skip3 = false;
+            object loopEnd = null;
             CodeInstruction cache = null;
             for (int i = 0; i < codes.Count; i++)
             {
                 CodeInstruction code = codes[i];
+                if (!skip && code.opcode == OpCodes.Isinst && code.operand.ToString().EndsWith("Pawn"))
+                {
+                    for (int j = i + 1; j < codes.Count; j--)
+                    {
+                        CodeInstruction code2 = codes[j];
+                        if (code2.opcode == OpCodes.Brfalse && codes[j - 1].operand == codes[j - 2].operand)
+                        {
+                            loopEnd = code2.operand;
+                            break;
+                        }
+                    }
+                    if (loopEnd == null)
+                    {
+                        Log.Error("KzPatch not applied #KzPatch");
+                        throw new Exception("Can't find loop end");
+                    }
+                    skip = true;
+                }
                 if (!skip2 && code.opcode == OpCodes.Ldfld && code.ToString().EndsWith("::p"))
                 {
                     cache = code;
                     skip2 = true;
                 }
-                if (code.opcode == OpCodes.Call && code.operand.ToString().Contains("AndReach"))
+                if (!skip3 && code.opcode == OpCodes.Callvirt && code.operand.ToString().EndsWith("nist()"))
                 {
+                    var loc = codes[i - 1].operand;
                     yield return code;
                     yield return codes[i + 1];
-                    yield return new CodeInstruction(OpCodes.Ldloc_S, 14);
+                    yield return new CodeInstruction(OpCodes.Ldloc_S, loc);
                     yield return new CodeInstruction(OpCodes.Ldloc_0);
                     yield return cache;
-                    yield return new CodeInstruction(OpCodes.Beq_S, codes[i + 1].operand);
-                    skipint = i + 1;
-                    skip = true;
+                    yield return new CodeInstruction(OpCodes.Beq_S, loopEnd);
+                    yield return new CodeInstruction(OpCodes.Ldloc_S, loc);
+                    yield return new CodeInstruction(OpCodes.Call, typeof(HardworkingUtility).Method("IsHardworkingPawn", new Type[] { typeof(Pawn) }));
+                    yield return new CodeInstruction(OpCodes.Brtrue, loopEnd);
+                    skip3 = true;
+                    i++;
+                    continue;
                 }
-                if (!skip && i != skipint)
-                {
-                    yield return code;
-                }
-                else
-                {
-                    skip = false;
-                }
+                yield return code;
             }
         }
+
     }
 
     [HarmonyPatch]
