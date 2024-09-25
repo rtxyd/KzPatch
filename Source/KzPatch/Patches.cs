@@ -71,7 +71,7 @@ namespace KzPatch
                 __result = true;
                 return x.needs == null ? x.Spawned : false;
             }
-            return false;
+            return true;
         }
     }
     [HarmonyPatch]
