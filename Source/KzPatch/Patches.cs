@@ -30,19 +30,19 @@ namespace KzPatch
                 CodeInstruction code = codes[i];
                 if (!skip && code.opcode == OpCodes.Isinst && code.operand.ToString().EndsWith("Pawn"))
                 {
-                    for (int j = i + 1; j < codes.Count; j--)
+                    for (int j = i - 1; j >= 0; j--)
                     {
                         CodeInstruction code2 = codes[j];
-                        if (code2.opcode == OpCodes.Brfalse && codes[j - 1].operand == codes[j - 2].operand)
+                        if (code2.opcode == OpCodes.Br)
                         {
                             loopEnd = code2.operand;
                             break;
                         }
-                    }
-                    if (loopEnd == null)
-                    {
-                        Log.Error("KzPatch not applied #KzPatch");
-                        throw new Exception("Can't find loop end");
+                        if (code2.operand.ToString().EndsWith("r()"))
+                        {
+                            Log.Error("KzPatch not applied #KzPatch");
+                            throw new Exception("Can't find loop end");
+                        }
                     }
                     skip = true;
                 }
@@ -56,12 +56,15 @@ namespace KzPatch
                     var loc = codes[i - 1].operand;
                     yield return code;
                     yield return codes[i + 1];
-                    yield return new CodeInstruction(OpCodes.Ldloc_S, loc);
-                    yield return new CodeInstruction(OpCodes.Ldloc_0);
-                    yield return cache;
-                    yield return new CodeInstruction(OpCodes.Beq_S, loopEnd);
+                    //yield return new CodeInstruction(OpCodes.Ldloc_S, loc);
+                    //yield return new CodeInstruction(OpCodes.Ldloc_0);
+                    //yield return cache;
+                    //yield return new CodeInstruction(OpCodes.Beq_S, loopEnd);
                     yield return new CodeInstruction(OpCodes.Ldloc_S, loc);
                     yield return new CodeInstruction(OpCodes.Call, typeof(HardworkingUtility).Method("IsHardworkingPawn", new Type[] { typeof(Pawn) }));
+                    yield return new CodeInstruction(OpCodes.Brfalse, codes[i + 1].operand);
+                    yield return new CodeInstruction(OpCodes.Ldloc_S, loc);
+                    yield return new CodeInstruction(OpCodes.Callvirt, typeof(Pawn).PropertyGetter("Downed"));
                     yield return new CodeInstruction(OpCodes.Brtrue, loopEnd);
                     skip3 = true;
                     i++;
