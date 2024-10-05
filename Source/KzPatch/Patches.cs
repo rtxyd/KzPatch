@@ -150,10 +150,13 @@ namespace KzPatch
             if (schedule != null && schedule.timeSchedule[GenLocalDate.HourOfDay(pawn.Map)])
             {
                 List<AMMapPortal> available = new List<AMMapPortal>();
-                MapComponent_Submap.GetComp(pawn.Map).Submaps.FindAll((MapParent_Custom m) => m.entrance != null && pawn.CanReach(m.entrance, PathEndMode.Touch, Danger.Deadly) && m.entrance.IsAvailable(pawn)).ForEach(delegate (MapParent_Custom m)
+                foreach (var m in MapComponent_Submap.GetComp(pawn.Map).Submaps)
                 {
-                    available.Add(m.entrance);
-                });
+                    if (m.entrance != null && pawn.CanReach(m.entrance, PathEndMode.Touch, Danger.Deadly) && m.entrance.IsAvailable(pawn))
+                    {
+                        available.Add(m.entrance);
+                    }
+                }
                 if (pawn.Map.Parent is MapParent_Custom { Exit: not null } mapParent_Custom && mapParent_Custom.Exit.IsAvailable(pawn) && pawn.CanReach(mapParent_Custom.Exit, PathEndMode.Touch, Danger.Deadly))
                 {
                     available.Add(mapParent_Custom.Exit);
@@ -164,7 +167,6 @@ namespace KzPatch
                 }
             }
         }
-
     }
     [HarmonyPatch]
     public static class JobGiver_EnterAllowedLevelPatch

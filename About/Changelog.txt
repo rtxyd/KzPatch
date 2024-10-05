@@ -1,5 +1,10 @@
 # Changelog for KzPatch
 
+1.5.4 - 修复了当没有加ancient urban ruins时产生的红字（对游戏没有影响），可以不加ancient urban ruins。
+
+1.5.3 - 
+优化了代码逻辑，现在兽耳娘自己走到传送点的时候不会被小人截胡了。
+
 1.5.2 -
 修复了一个bug,：
 该bug会导致殖民者不主动进子地图
