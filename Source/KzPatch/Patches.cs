@@ -191,11 +191,9 @@ namespace KzPatch
         public static IEnumerable<CodeInstruction> EnterAllowedLevel_code(ILGenerator iLGenerator, IEnumerable<CodeInstruction> instructions)
         {
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            bool skip = false;
             bool skip2 = false;
             bool skip3 = false;
             bool skip4 = false;
-            int skipint = -2;
             CodeInstruction cache = null;
             Label labelTrue = iLGenerator.DefineLabel();
             for (int i = 0; i < codes.Count; i++)
@@ -213,23 +211,27 @@ namespace KzPatch
                     yield return new CodeInstruction(OpCodes.Ldarg_1);
                     yield return new CodeInstruction(OpCodes.Call, typeof(HardworkingUtility).Method("IsHardworkingPawn", new Type[] { typeof(Pawn) }));
                     yield return cache;
-                    skipint = i + 1;
-                    skip = true;
+                    if (cache.opcode == codes[i + 1].opcode)
+                    {
+                        for (int j = codes.Count - 1; j > i; j--)
+                        {
+                            if (codes[j].labels.Any() && codes[j].labels.Contains((Label)cache.operand) && codes[j].labels.Contains((Label)codes[i + 1].operand))
+                            {
+                                codes[i + 2].labels.Add(labelTrue);
+                                skip4 = true;
+                            }
+                        }
+                    }
+                    i++;
                     skip3 = true;
+                    continue;
                 }
-                if (!skip4 && skip2 && code.labels.Contains((Label)cache.operand))
+                if (!skip4 && skip3 && code.labels.Contains((Label)cache.operand))
                 {
                     code.labels.Add(labelTrue);
                     skip4 = true;
                 }
-                if (!skip && i != skipint)
-                {
-                    yield return code;
-                }
-                else
-                {
-                    skip = false;
-                }
+                yield return code;
             }
         }
     }
